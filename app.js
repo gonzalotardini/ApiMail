@@ -1,7 +1,7 @@
-// app.js
 const express = require('express');
 const bodyParser = require('body-parser');
 const nodemailer = require('nodemailer');
+const cors = require('cors'); // Importar cors
 require('dotenv').config();
 
 const app = express();
@@ -9,6 +9,13 @@ const app = express();
 // Middleware para parsear el cuerpo de las solicitudes como JSON
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: true }));
+
+// Configuración de CORS
+app.use(cors({
+  origin: 'http://localhost:8080', // Permitir solicitudes desde esta URL
+  methods: ['GET', 'POST'],
+  allowedHeaders: ['Content-Type']
+}));
 
 // Configuración del transporte de correo electrónico (Nodemailer)
 const transporter = nodemailer.createTransport({
@@ -24,7 +31,7 @@ app.post('/send-email', (req, res) => {
   const { to, subject, text } = req.body;
 
   const mailOptions = {
-    from: 'gonzalotardini@gmail.com',
+    from: process.env.EMAIL_USER, // Usar el remitente del entorno
     to,
     subject,
     text,
