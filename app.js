@@ -6,13 +6,25 @@ require('dotenv').config();
 
 const app = express();
 
+// Lista de orígenes permitidos
+const allowedOrigins = [
+  'http://localhost:8080', // Origen de desarrollo
+  'https://giovanelli-tardini-web.vercel.app/' // Origen de producción
+];
+
 // Middleware para parsear el cuerpo de las solicitudes como JSON
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: true }));
 
 // Configuración de CORS
 app.use(cors({
-  origin: 'http://localhost:8080', // Permitir solicitudes desde esta URL
+  origin: (origin, callback) => {
+    if (allowedOrigins.includes(origin) || !origin) { // Permitir orígenes de la lista y solicitudes sin origen (como desde Postman)
+      callback(null, true);
+    } else {
+      callback(new Error('No autorizado por CORS'));
+    }
+  },
   methods: ['GET', 'POST'],
   allowedHeaders: ['Content-Type']
 }));
@@ -31,7 +43,7 @@ app.post('/send-email', (req, res) => {
   const { to, subject, text } = req.body;
 
   const mailOptions = {
-    from: process.env.EMAIL_USER, // Usar el remitente del entorno
+    from: process.env.EMAIL_USER,
     to,
     subject,
     text,
