@@ -6,12 +6,6 @@ require('dotenv').config();
 
 const app = express();
 
-// Lista de orígenes permitidos
-const allowedOrigins = [
-  'http://localhost:8080', // Origen de desarrollo
-  'https://giovanelli-tardini-web.vercel.app/' // Origen de producción
-];
-
 // Middleware para parsear el cuerpo de las solicitudes como JSON
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: true }));
@@ -19,15 +13,22 @@ app.use(bodyParser.urlencoded({ extended: true }));
 // Configuración de CORS
 app.use(cors({
   origin: (origin, callback) => {
+    const allowedOrigins = [
+      'https://giovanelli-tardini-web.vercel.app', // Tu dominio de producción
+      'http://localhost:8080' // Origen de desarrollo
+    ];
     if (allowedOrigins.includes(origin) || !origin) { // Permitir orígenes de la lista y solicitudes sin origen (como desde Postman)
       callback(null, true);
     } else {
       callback(new Error('No autorizado por CORS'));
     }
   },
-  methods: ['GET', 'POST'],
+  methods: ['GET', 'POST', 'OPTIONS'], // Añadir 'OPTIONS'
   allowedHeaders: ['Content-Type']
 }));
+
+// Manejar solicitudes OPTIONS para CORS
+app.options('*', cors());
 
 // Configuración del transporte de correo electrónico (Nodemailer)
 const transporter = nodemailer.createTransport({
