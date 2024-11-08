@@ -14,7 +14,8 @@ app.use(bodyParser.urlencoded({ extended: true }));
 app.use(cors({
   origin: (origin, callback) => {
     const allowedOrigins = [
-      'http://giovanellitardini.com.ar/',
+      'http://giovanellitardini.com.ar',
+      'https://giovanellitardini.com.ar',
       'https://giovanelli-tardini-web.vercel.app', // Tu dominio de producción
       'http://localhost:8080' // Origen de desarrollo
     ];
