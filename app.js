@@ -17,7 +17,12 @@ app.use(cors({
       'http://giovanellitardini.com.ar',
       'https://giovanellitardini.com.ar',
       'https://giovanelli-tardini-web.vercel.app', // Tu dominio de producción
-      'http://localhost:8080' // Origen de desarrollo
+      'http://localhost:8080', // Origen de desarrollo
+      'http://localhost:3000', // Origen de desarrollo
+      'https://strepsys.com.ar',
+      'http://strepsys.com.ar',
+      'http://strepsys.com',
+      'https://strepsys.com'
     ];
     if (allowedOrigins.includes(origin) || !origin) { // Permitir orígenes de la lista y solicitudes sin origen (como desde Postman)
       callback(null, true);
